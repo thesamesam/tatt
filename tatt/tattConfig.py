@@ -7,10 +7,10 @@ import sys
 from configobj import ConfigObj
 from validate  import Validator
 # To access the specfile:
-from pkg_resources import resource_filename
+from importlib.resources import files
 
 # resource_filename will give us platform-independent access to the specfile
-specfile = resource_filename('tatt', 'dot-tatt-spec')
+specfile = str(files('tatt').joinpath('dot-tatt-spec'))
 
 # this validator will also do type conversion according to the spec file!
 class tattConfig (ConfigObj):
