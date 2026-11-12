@@ -3,7 +3,7 @@
 import random
 import re
 import math
-from portage.dep import check_required_use, dep_getcpv
+from portage.dep import check_required_use, Atom
 from subprocess import *
 
 from .tool import unique
@@ -29,14 +29,14 @@ def findUseFlagCombis (package, config, port):
     Generate combinations of use flags to test
     The output will be a list each containing a ready to use USE=... string
     """
-    uselist = sorted(reduce_flags(get_flags(dep_getcpv(package.packageString()))))
+    uselist = sorted(reduce_flags(get_flags(Atom(package.packageString()).cpv)))
     # The uselist could have duplicates due to slot-conditional
     # output of equery
     uselist=unique(uselist)
     for i in config['ignoreprefix']:
         uselist=[u for u in uselist if not re.match(i,u)]
 
-    ruse = " ".join(port.aux_get(dep_getcpv(package.packageString()), ["REQUIRED_USE"]))
+    ruse = " ".join(port.aux_get(Atom(package.packageString()).cpv, ["REQUIRED_USE"]))
     swlist = []
     if config['usecombis'] == 0:
         # Do only all and nothing:

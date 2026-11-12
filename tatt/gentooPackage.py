@@ -1,7 +1,7 @@
 """Module for easy access to portage's atom syntax """
 
 import re
-from portage.dep import dep_getcpv, dep_getkey, isvalidatom
+from portage.dep import Atom, dep_getkey, isvalidatom
 
 class gentooPackage(object):
     """A Gentoo package consists of:
@@ -15,7 +15,7 @@ class gentooPackage(object):
         if not isvalidatom(st):
             st = '=' + st
         cp = dep_getkey(st)
-        self.ver = dep_getcpv(st)[len(cp) + 1:] # +1 to strip the leading '-'
+        self.ver = Atom(st).cpv[len(cp) + 1:] # +1 to strip the leading '-'
         slashparts = cp.split("/")
         self.category = slashparts[0]
         self.name = slashparts[1]
